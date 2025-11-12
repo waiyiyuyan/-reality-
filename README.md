@@ -50,17 +50,16 @@ REALITY 伪装效果的关键在于选择一个与您 VPS **相邻**、且具有
 ## ⚙️ 步骤二：服务器配置 (`config.json`)
 
 请将以下配置保存为 `config.json` 或 `server.json`，并**移除所有注释字段**后再运行。
-
-```json
+'''
 {
     "log": {
         "loglevel": "warning",  日志级别：warning 只记录警告及以上日志，适合生产环境，以控制日志大小。
     },
     "inbounds": [
         {
-            "listen": "0.0.0.0", # 监听地址：0.0.0.0 表示监听所有网络接口和公网 IP。,
-            "port": 14559, # 监听端口：VLESS 接收连接的端口。由于您的限制，使用了非标准 HTTPS 端口。,
-            "protocol": "vless", # 协议类型：VLESS，一种轻量级、高性能的传输协议。,
+            "listen": "0.0.0.0", # 监听地址：0.0.0.0 表示监听所有网络接口和公网 IP。
+            "port": 14559, # 监听端口：VLESS 接收连接的端口。由于您的限制，使用了非标准 HTTPS 端口。
+            "protocol": "vless", # 协议类型：VLESS，一种轻量级、高性能的传输协议。
             "settings": {
                 "clients": [
                     {
@@ -70,31 +69,31 @@ REALITY 伪装效果的关键在于选择一个与您 VPS **相邻**、且具有
                 "decryption": "none", # VLESS 解密方式：必须为 none，因为 REALITY 在底层提供安全，VLESS 数据体不应额外加密。
             },
             "streamSettings": {
-                "network": "tcp", # 底层网络协议：REALITY 目前必须运行在 TCP 上。,
-                "security": "reality", # 传输安全：使用 REALITY 机制，将流量伪装成访问真实网站的 HTTPS 流量。,
+                "network": "tcp", # 底层网络协议：REALITY 目前必须运行在 TCP 上。
+                "security": "reality", # 传输安全：使用 REALITY 机制，将流量伪装成访问真实网站的 HTTPS 流量。
                 "tcpSettings": {
                     "header": {
                         "type": "none", #  TCP 伪装头类型：none 表示不使用额外的 TCP 伪装，依赖 REALITY 本身的伪装能力。
                     }
                 },
                 "realitySettings": {
-                    "show": false, # 显示握手信息：false 表示不在日志中显示 REALITY 握手信息，增强隐蔽性。,
-                    "dest": "server8.webhostmost.com:443", # 目标网站：伪装流量要访问的公网真实网站地址和端口。,
-                    "handshake": null, #  握手目标：高级设置，通常留空或 null。,
-                    "session": null, #  会话 ID：高级设置，通常留空或 null。,
-                    "privateKey": "KKskeZ3BJ-ZroZ6w9dMEP-aM1ZA0GQasvZXFJ6ckR04", # 服务器私钥：用于 REALITY 握手和验证，必须保密，客户端使用对应的公钥。,
-                    "minClientVer": "", # 最小客户端版本：留空表示不限制。,
-                    "maxClientVer": "", # 最大客户端版本：留空表示不限制。,
-                    "maxSha256Time": 60,# 随机数有效期：REALITY 握手随机数（Salt）的最长有效时间（秒），用于防重放攻击。,
+                    "show": false, # 显示握手信息：false 表示不在日志中显示 REALITY 握手信息，增强隐蔽性。
+                    "dest": "server8.webhostmost.com:443", # 目标网站：伪装流量要访问的公网真实网站地址和端口。
+                    "handshake": null, #  握手目标：高级设置，通常留空或 null。
+                    "session": null, #  会话 ID：高级设置，通常留空或 null。
+                    "privateKey": "KKskeZ3BJ-ZroZ6w9dMEP-aM1ZA0GQasvZXFJ6ckR04", # 服务器私钥：用于 REALITY 握手和验证，必须保密，客户端使用对应的公钥。
+                    "minClientVer": "", # 最小客户端版本：留空表示不限制。
+                    "maxClientVer": "", # 最大客户端版本：留空表示不限制。
+                    "maxSha256Time": 60,# 随机数有效期：REALITY 握手随机数（Salt）的最长有效时间（秒），用于防重放攻击。
                     "fingerprints": [
                         "chrome",
                         "firefox"
-                    ], # 客户端指纹：允许客户端伪装的 TLS 浏览器指纹列表，提高抗探测能力。,
+                    ], # 客户端指纹：允许客户端伪装的 TLS 浏览器指纹列表，提高抗探测能力。
                     "serverNames": [
-                        "server8.webhostmost.com" # 服务器名称 (SNI)：伪装的域名，客户端必须用此 SNI 连接，且通常需与 dest 网站匹配。,
+                        "server8.webhostmost.com" # 服务器名称 (SNI)：伪装的域名，客户端必须用此 SNI 连接，且通常需与 dest 网站匹配。
                     ],
                     "shortIds": [
-                        "fe4f754a504e7cac" # 短 ID 列表：额外的身份验证 ID，客户端必须提供其中一个。,
+                        "fe4f754a504e7cac" # 短 ID 列表：额外的身份验证 ID，客户端必须提供其中一个。
                     ],
                     "spiderX": "/", # 路径伪装：客户端伪装访问的 URL 路径。
                 }
@@ -103,12 +102,12 @@ REALITY 伪装效果的关键在于选择一个与您 VPS **相邻**、且具有
     ],
     "outbounds": [
         {
-            "protocol": "freedom", # 出站协议：freedom 表示直接将流量转发到目标网站。,
+            "protocol": "freedom", # 出站协议：freedom 表示直接将流量转发到目标网站。
             "settings": {}, # 出站设置：freedom 协议通常不需要特殊设置。
         }
     ],
 }
-```
+'''
 
 ### 启动服务
 
