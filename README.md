@@ -43,7 +43,7 @@
 REALITY 伪装效果的关键在于选择一个与您 VPS **相邻**、且具有大量 HTTPS 流量的网站作为伪装目标（`dest`）。
 
 1.  **扫描：** 使用 `RealiTLScanner` 工具扫描与您 VPS IP 地址相近的 IP 段。
-    > **命令示例：** `./RealiTLScanner -addr <您的VPS IP地址>`
+    > **命令示例：** `./RealiTLScanner -addr VPSIP -port 443 -thread 100 [线程数] -timeout 5 [超时] -out file.csv [输出到文件]
 2.  **筛选：** 从扫描结果中选择一个支持 TLS 1.3/HTTP/2，且在中国大陆地区访问速度快、不重定向的境外网站。
 3.  **确定：** 假设您选择的伪装目标是 `server8.webhostmost.com:443`。
 
