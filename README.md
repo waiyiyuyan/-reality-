@@ -36,7 +36,7 @@
 | **生成短 ID** | `openssl rand -hex 8` | 生成 **Short ID**，用于 REALITY 流量的二次认证。 | Short ID: `fe4f754a504e7cac` |
 | **生成 UUID** | `./xray uuid` | 生成 **VLESS 用户 ID**，用于 VLESS 协议认证。 | UUID: `f76f4404-73a0-439e-b449-65ddca9d8614` |
 
-> **⚠️ 注意：** 您的 **公钥**（`Public Key`）是客户端连接时必须使用的。请务必保存好 `x25519` 命令的完整输出。在您的示例中，`Password` 字段可能是指公钥的别名，但**客户端需要的是 `Public key`**。
+> **⚠️ 注意：** 您的 **公钥**（`Public Key`）是客户端连接时必须使用的。请务必保存好 `x25519` 命令的完整输出。在您的示例中，`Password` 字段是指公钥的别名。
 
 ### 4\. 寻找优质伪装域名 (Dest)
 
