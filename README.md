@@ -50,7 +50,7 @@ REALITY 伪装效果的关键在于选择一个与您 VPS **相邻**、且具有
 ## ⚙️ 步骤二：服务器配置 (`config.json`)
 
 请将以下配置保存为 `config.json` 或 `server.json`，并**移除所有注释字段**后再运行。
-'''
+'''json
 {
     "log": {
         "loglevel": "warning",  日志级别：warning 只记录警告及以上日志，适合生产环境，以控制日志大小。
