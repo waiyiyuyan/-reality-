@@ -49,10 +49,6 @@ REALITY 伪装效果的关键在于选择一个与您 VPS **相邻**、且具有
 
 ## ⚙️ 步骤二：服务器配置 (`config.json`)
 
-## 📄 VLESS + REALITY 服务器配置及注释（Markdown 清晰版）
-
-以下是您的服务器配置 JSON 内容：
-
 ```json
 {
     "log": {
