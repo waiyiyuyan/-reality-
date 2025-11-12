@@ -68,7 +68,7 @@ REALITY 伪装效果的关键在于选择一个与您 VPS **相邻**、且具有
 ```json
 {
     "log": {
-        "loglevel": "warning" \# loglevel`: **warning** - 日志级别为警告，只记录警告及以上日志，适合生产环境，以控制日志大小。
+        "loglevel": "warning"
     },
     "inbounds": [
         {
