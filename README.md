@@ -81,7 +81,7 @@ REALITY 流量伪装依赖一个**高质量 HTTPS 域名**，建议选择：
 ```bash
 ./RealiTLScanner -addr VPS_IP -port 443 -thread 100 -timeout 5 -out file.csv
 ````
-
+> 🔗 [RealiTLScanner GitHub 下载地址](https://github.com/XTLS/RealiTLScanner/releases/tag/v0.2.1)
 说明：
 
 * `-addr VPS_IP` → 你的 VPS 公网 IP
