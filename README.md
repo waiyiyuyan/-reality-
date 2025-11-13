@@ -114,9 +114,16 @@ REALITY 的关键在于伪装一个高质量目标域名。
           "minClientVer": "",
           "maxClientVer": "",
           "maxSha256Time": 60,
-          "fingerprints": ["chrome", "firefox"],
-          "serverNames": ["server8.webhostmost.com"],
-          "shortIds": ["fe4f754a504e7cac"],
+          "fingerprints": [
+            "chrome",
+            "firefox"
+          ],
+          "serverNames": [
+            "server8.webhostmost.com"
+          ],
+          "shortIds": [
+            "fe4f754a504e7cac"
+          ],
           "spiderX": "/"
         }
       }
@@ -129,6 +136,7 @@ REALITY 的关键在于伪装一个高质量目标域名。
     }
   ]
 }
+
 ```
 
 ---
