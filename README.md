@@ -119,51 +119,60 @@ server8.webhostmost.com:443
 
 ```json
 {
-  "log": {
-    "loglevel": "warning"
-  },
-  "inbounds": [
-    {
-      "listen": "0.0.0.0",
-      "port": 14559,
-      "protocol": "vless",
-      "settings": {
-        "clients": [
-          {
-            "id": "f76f4404-73a0-439e-b449-65ddca9d8614"
-          }
-        ],
-        "decryption": "none"
-      },
-      "streamSettings": {
-        "network": "tcp",
-        "security": "reality",
-        "tcpSettings": {
-          "header": {
-            "type": "none"
-          }
-        },
-        "realitySettings": {
-          "show": false,
-          "dest": "server8.webhostmost.com:443",
-          "xver": 0,
-          "privateKey": "KKskeZ3BJ-ZroZ6w9dMEP-aM1ZA0GQasvZXFJ6ckR04",
-          "shortIds": ["fe4f754a504e7cac"],
-          "serverNames": ["server8.webhostmost.com"],
-          "fingerprints": ["chrome"],
-          "maxClientVer": "",
-          "minClientVer": "",
-          "maxTimeDiff": 60,
-          "spiderX": "/"
+    "log": {
+        "loglevel": "warning"
+    },
+    "inbounds": [
+        {
+			"listen": "0.0.0.0",
+            "port": 3190,
+            "protocol": "vless",
+            "settings": {
+                "clients": [
+                    {
+                        "id": "cfbd986e-dab5-48c7-ab8a-7d18b1487037"
+                    }
+                ],
+                "decryption": "none"
+            },
+            "streamSettings": {
+                "network": "tcp",
+                "security": "reality",
+				"tcpSettings": {
+                    "header": {
+                        "type": "none"
+                    }
+				},
+                "realitySettings": {
+                    "show": false,
+                    "dest": "server8.webhostmost.com:443",
+                    "handshake": null,
+                    "session": null,
+                    "privateKey": "wMgw3c2SIhK6Wc4oZOX7b4vOPzhALSkpw5gMJU6sQ0Y",
+                    "minClientVer": "",
+                    "maxClientVer": "",
+                    "maxSha256Time": 60,
+                    "fingerprints": [
+                        "chrome",
+                        "firefox"
+                    ],
+                    "serverNames": [
+                        "server8.webhostmost.com"
+                    ],
+                    "shortIds": [
+                        "88d5e2f99bba521c"
+                    ],
+                    "spiderX": "/"
+                }
+            }
         }
-      }
-    }
-  ],
-  "outbounds": [
-    {
-      "protocol": "freedom"
-    }
-  ]
+    ],
+    "outbounds": [
+        {
+            "protocol": "freedom",
+            "settings": {}
+        }
+    ]
 }
 ```
 
