@@ -182,6 +182,7 @@ server8.webhostmost.com:443
 
 | 字段                      | 说明                                 |
 | ----------------------- | ---------------------------------- |
+| '"id": "uudi"           | 唯一标识符                              |
 | `"protocol": "vless"`   | 使用无加密轻量协议 VLESS                    |
 | `"security": "reality"` | 开启 Reality 流量伪装                    |
 | `"privateKey"`          | 服务端私钥（仅此服务器保存）                     |
