@@ -65,9 +65,6 @@ UUID:        f76f4404-73a0-439e-b449-65ddca9d8614
 
 ---
 
-没问题，我帮你把“选择伪装域名（REALITY 核心）”部分改写成完整的 Markdown 格式，保证 **GitHub 上直接渲染**：
-
-````markdown
 ## 🌐 三、选择伪装域名（REALITY 核心）
 
 REALITY 流量伪装依赖一个**高质量 HTTPS 域名**，建议选择：
