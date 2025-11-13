@@ -1,184 +1,233 @@
-# -reality-
-纯手工，零代码搭建 reality 节点
+---
 
-**服务器部署与客户端配置指南**。
+# 🚀 VLESS + REALITY 纯手工部署与客户端配置终极指南
 
------
+> **零代码配置｜Xray 核心｜高隐蔽性伪装方案**
 
-# 🚀 VLESS + REALITY 部署与 V2RayN 配置终极指南
+本指南将详细介绍如何在 VPS 上使用 **Xray 核心** 部署基于 **REALITY** 伪装的 **VLESS** 协议节点，并配置 **V2RayN 客户端** 实现安全、高效的代理连接。
 
-这份指南将详细介绍如何配置和部署 Xray 核心，以实现基于 REALITY 伪装的 VLESS 协议。
+---
 
-## 🖥️ 步骤一：服务器环境准备与必要信息生成
+## 🖥️ 一、服务器环境准备与必要信息生成
 
-### 1\. 确认 VPS 架构
+### 1. 确认 VPS 架构
 
-在您的 VPS 上运行以下命令，确定您需要下载的 Xray 核心版本：
+运行以下命令，确定您的系统架构（以便下载正确版本的 Xray 核心）：
 
-| 命令 | 目的 | 示例输出 (x86\_64) |
-| :--- | :--- | :--- |
+| 命令         | 作用          | 示例输出     |
+| :--------- | :---------- | :------- |
 | `uname -m` | 查看系统 CPU 架构 | `x86_64` |
 
-### 2\. 下载 Xray 核心
+---
 
-根据上一步确认的架构，下载对应的 Xray 核心文件。
+### 2. 下载 Xray 核心
 
-> **示例：** 针对 `x86_64` 架构：
-> `https://github.com/XTLS/Xray-core/releases/download/v25.10.15/Xray-linux-64.zip`
+根据系统架构，从 [Xray 官方发布页](https://github.com/XTLS/Xray-core/releases) 下载对应版本。
 
-### 3\. 生成安全密钥与标识符
+> 示例（x86_64 架构）：
 
-这些是 REALITY 认证和 VLESS 协议必需的安全参数。
+```bash
+https://github.com/XTLS/Xray-core/releases/download/v25.10.15/Xray-linux-64.zip
+```
 
-| 步骤 | 命令 | 目的与用途 | 结果示例 |
-| :--- | :--- | :--- | :--- |
-| **生成密钥对** | `./xray x25519` | 生成 REALITY **私钥**（用于服务器）和 **公钥**（用于客户端）。 | PrivateKey: `KKskeZ3BJ-ZroZ6w9dMEP-aM1ZA0GQasvZXFJ6ckR04` |
-| **生成短 ID** | `openssl rand -hex 8` | 生成 **Short ID**，用于 REALITY 流量的二次认证。 | Short ID: `fe4f754a504e7cac` |
-| **生成 UUID** | `./xray uuid` | 生成 **VLESS 用户 ID**，用于 VLESS 协议认证。 | UUID: `f76f4404-73a0-439e-b449-65ddca9d8614` |
+---
 
-> **⚠️ 注意：** 您的 **公钥**（`Public Key`）是客户端连接时必须使用的。请务必保存好 `x25519` 命令的完整输出。在您的示例中，`Password` 字段是指公钥的别名。
+### 3. 生成密钥与标识符
 
-### 4\. 寻找优质伪装域名 (Dest)
+这些信息是 **REALITY + VLESS** 认证必需的参数。
 
-REALITY 伪装效果的关键在于选择一个与您 VPS **相邻**、且具有大量 HTTPS 流量的网站作为伪装目标（`dest`）。
+| 步骤      | 命令                    | 说明                                     | 示例结果                                                      |
+| :------ | :-------------------- | :------------------------------------- | :-------------------------------------------------------- |
+| 生成密钥对   | `./xray x25519`       | 生成 REALITY 的 **私钥（服务器）** 与 **公钥（客户端）** | PrivateKey: `KKskeZ3BJ-ZroZ6w9dMEP-aM1ZA0GQasvZXFJ6ckR04` |
+| 生成短 ID  | `openssl rand -hex 8` | 生成 **Short ID**（REALITY 二次认证）          | Short ID: `fe4f754a504e7cac`                              |
+| 生成 UUID | `./xray uuid`         | 生成 **VLESS 用户 ID**                     | UUID: `f76f4404-73a0-439e-b449-65ddca9d8614`              |
 
-1.  **扫描：** 使用 `RealiTLScanner` 工具扫描与您 VPS IP 地址相近的 IP 段。 
-    > ./RealiTLScanner -addr VPSIP -port 443 -thread 100 [线程数] -timeout 5 [超时] -out file.csv [输出到文件]
-2.  **筛选：** 从扫描结果中选择一个支持 TLS 1.3/HTTP/2，且在中国大陆地区访问速度快、不重定向的境外网站。
-    > ./reality-checker csv file.csv     [https://github.com/V2RaySSR/RealityChecker/ 程序下载地址] 
-4.  **确定：** 假设您选择的伪装目标是 `server8.webhostmost.com:443`。
+> ⚠️ **注意**：
+>
+> * **公钥 (Public Key)** 必须在客户端中填写。
+> * 请妥善保存 `x25519` 命令的完整输出内容。
 
-## ⚙️ 步骤二：服务器配置 (`config.json`)
+---
+
+### 4. 选择优质伪装域名 (`dest`)
+
+REALITY 的关键在于伪装一个高质量目标域名。
+请选取一个与 VPS **地理位置接近**、**HTTPS 流量大**、**不重定向** 的境外网站。
+
+#### 工具推荐：
+
+1. **扫描伪装目标：**
+
+   ```bash
+   ./RealiTLScanner -addr VPS_IP -port 443 -thread 100 -timeout 5 -out file.csv
+   ```
+2. **筛选可用站点：**
+
+   ```bash
+   ./reality-checker csv file.csv
+   ```
+
+   👉 [RealityChecker 下载地址](https://github.com/V2RaySSR/RealityChecker/)
+
+#### 示例选择：
+
+```
+伪装目标：server8.webhostmost.com:443
+```
+
+---
+
+## ⚙️ 二、服务器配置（`config.json`）
+
+将以下配置保存为 `server.json`（或任意文件名），并确保路径正确。
 
 ```json
 {
-    "log": {
-        "loglevel": "warning"
-    },
-    "inbounds": [
-        {
-            "listen": "0.0.0.0",
-            "port": 14559,
-            "protocol": "vless",
-            "settings": {
-                "clients": [
-                    {
-                        "id": "f76f4404-73a0-439e-b449-65ddca9d8614"
-                    }
-                ],
-                "decryption": "none"
-            },
-            "streamSettings": {
-                "network": "tcp",
-                "security": "reality",
-                "tcpSettings": {
-                    "header": {
-                        "type": "none"
-                    }
-                },
-                "realitySettings": {
-                    "show": false,
-                    "dest": "server8.webhostmost.com:443",
-                    "handshake": null,
-                    "session": null,
-                    "privateKey": "KKskeZ3BJ-ZroZ6w9dMEP-aM1ZA0GQasvZXFJ6ckR04",
-                    "minClientVer": "",
-                    "maxClientVer": "",
-                    "maxSha256Time": 60,
-                    "fingerprints": [
-                        "chrome",
-                        "firefox"
-                    ],
-                    "serverNames": [
-                        "server8.webhostmost.com"
-                    ],
-                    "shortIds": [
-                        "fe4f754a504e7cac"
-                    ],
-                    "spiderX": "/"
-                }
-            }
+  "log": {
+    "loglevel": "warning"
+  },
+  "inbounds": [
+    {
+      "listen": "0.0.0.0",
+      "port": 14559,
+      "protocol": "vless",
+      "settings": {
+        "clients": [
+          {
+            "id": "f76f4404-73a0-439e-b449-65ddca9d8614"
+          }
+        ],
+        "decryption": "none"
+      },
+      "streamSettings": {
+        "network": "tcp",
+        "security": "reality",
+        "tcpSettings": {
+          "header": {
+            "type": "none"
+          }
+        },
+        "realitySettings": {
+          "show": false,
+          "dest": "server8.webhostmost.com:443",
+          "privateKey": "KKskeZ3BJ-ZroZ6w9dMEP-aM1ZA0GQasvZXFJ6ckR04",
+          "minClientVer": "",
+          "maxClientVer": "",
+          "maxSha256Time": 60,
+          "fingerprints": ["chrome", "firefox"],
+          "serverNames": ["server8.webhostmost.com"],
+          "shortIds": ["fe4f754a504e7cac"],
+          "spiderX": "/"
         }
-    ],
-    "outbounds": [
-        {
-            "protocol": "freedom",
-            "settings": {}
-        }
-    ]
+      }
+    }
+  ],
+  "outbounds": [
+    {
+      "protocol": "freedom",
+      "settings": {}
+    }
+  ]
 }
 ```
 
-### 📋 详细配置字段说明
+---
 
-以下是对上述 JSON 配置中所有字段的详细解释：
+### 🧩 字段详解
 
-#### 日志设置 (`log`)
+#### 日志设置
 
-  * `loglevel`: **warning** - 日志级别为警告，只记录警告及以上日志，适合生产环境，以控制日志大小。
+* `loglevel: "warning"` → 仅记录警告及错误，减少日志体积。
 
-#### 入站连接设置 (`inbounds`)
+#### 入站连接
 
-  * `listen`: **0.0.0.0** - 监听地址，表示监听所有网络接口和公网 IP。
-  * `port`: **14559** - 监听端口，VLESS 接收连接的端口。
-  * `protocol`: **vless** - 协议类型为 VLESS。
+* `listen: "0.0.0.0"` → 监听所有网络接口。
+* `port: 14559` → 连接端口。
+* `protocol: "vless"` → 使用 VLESS 协议。
 
-#### VLESS 设置 (`settings`)
+#### 客户端验证
 
-  * `clients[0].id`: **f76f4404-...** - 客户端 UUID，用于身份验证。
-  * `decryption`: **none** - VLESS 解密方式，必须为 `none`，因为安全由 REALITY 提供。
+* `id` → 客户端 UUID。
+* `decryption: "none"` → 不使用额外加密（REALITY 已负责安全）。
 
-#### 传输层设置 (`streamSettings`)
+#### 传输层
 
-  * `network`: **tcp** - 底层网络协议，REALITY 目前必须运行在 TCP 上。
-  * `security`: **reality** - 传输安全协议，使用 REALITY 机制进行流量伪装。
-  * `tcpSettings.header.type`: **none** - TCP 伪装头类型，`none` 表示不使用额外的 TCP 伪装。
+* `network: "tcp"` → REALITY 必须基于 TCP。
+* `security: "reality"` → 使用 REALITY 流量伪装。
+* `header.type: "none"` → 不额外伪装 TCP 头。
 
-#### REALITY 专属设置 (`realitySettings`)
+#### REALITY 设置
 
-  * `show`: **false** - 显示握手信息，设置为 `false` 增强隐蔽性。
-  * `dest`: **server8.webhostmost.com:443** - 目标网站，伪装流量要访问的公网真实网站地址和端口。
-  * `handshake` / `session`: **null** - 保持默认，通常用于高级设置。
-  * `privateKey`: **KKskeZ3BJ-...** - 服务器私钥，必须保密，客户端使用对应的公钥。
-  * `minClientVer` / `maxClientVer`: **""** - 客户端版本限制，留空表示不限制。
-  * `maxSha256Time`: **60** - 随机数有效期（秒），用于防重放攻击。
-  * `fingerprints`: **["chrome", "firefox"]** - 允许客户端伪装的 TLS 浏览器指纹列表。
-  * `serverNames`: **["server8.webhostmost.com"]** - 服务器名称 (SNI) 伪装，需与 `dest` 匹配。
-  * `shortIds`: **["fe4f754a504e7cac"]** - 额外的身份验证短 ID。
-  * `spiderX`: **/** - 路径伪装，客户端伪装访问的 URL 路径。
+| 字段             | 含义          | 示例                            |
+| :------------- | :---------- | :---------------------------- |
+| `dest`         | 伪装访问的目标网站   | `server8.webhostmost.com:443` |
+| `privateKey`   | 服务器私钥（务必保密） | `KKskeZ3BJ-ZroZ6...`          |
+| `fingerprints` | 浏览器指纹伪装类型   | `["chrome", "firefox"]`       |
+| `serverNames`  | 伪装的 SNI 名称  | `["server8.webhostmost.com"]` |
+| `shortIds`     | 客户端验证短 ID   | `["fe4f754a504e7cac"]`        |
+| `spiderX`      | 伪装路径        | `/`                           |
 
-#### 出站连接设置 (`outbounds`)
+---
 
-  * `protocol`: **freedom** - 出站协议，表示直接将流量转发到目标网站。
-  * `settings`: **{}** - `freedom` 协议的默认设置。
+### ▶️ 启动服务
 
-### 启动服务
-
-使用 `nohup` 命令让 Xray 服务在后台持续运行，并将日志输出到 `xray.log`：
+在后台运行 Xray：
 
 ```bash
 nohup ./xray run -c server.json > xray.log 2>&1 &
 ```
 
-## 📱 步骤三：V2RayN 客户端配置指南
+查看运行日志：
 
-在 V2RayN 客户端中，选择 **【添加 VLESS 服务器】**，然后对照以下表格填写参数。请确保您的**公钥**正确无误。
+```bash
+tail -f xray.log
+```
 
-| V2RayN 字段名 (中文/英文) | 对应服务器配置字段 | 填写值/说明 |
-| :--- | :--- | :--- |
-| **备注名称 (Remarks)** | (自定义) | `我的VLESS-REALITY节点` |
-| **地址 (Address)** | (VPS IP 地址) | **您的 VPS 的公网 IP 地址** |
-| **端口 (Port)** | `inbounds[0].port` | `14559` |
-| **用户 ID (UUID / ID)** | `clients[0].id` | `f76f4404-73a0-439e-b449-65ddca9d8614` |
-| **别名/用户 (AlterId)** | (默认) | `0` (VLESS 协议固定) |
-| **传输协议 (Network)** | `streamSettings.network` | `tcp` |
-| **伪装类型 (Type)** | `tcpSettings.header.type` | `none` (保持默认) |
-| **流控 (Flow)** | (VLESS flow) | **留空！** 避免 `xtls-rprx-vision` 报错 |
-| **底层传输安全 (Security)** | `streamSettings.security` | `reality` |
-| **SNI** | `realitySettings.serverNames` | `server8.webhostmost.com` |
-| **指纹 (Fingerprint)** | `realitySettings.fingerprints` | **选择 `chrome`** 或 `firefox` |
-| **公钥 (Public Key)** | (根据 `privateKey` 生成) | **填写您在步骤 3 中生成的 `Public key`。** |
-| **短 ID (Short ID)** | `realitySettings.shortIds` | `fe4f754a504e7cac` |
-| **跳转目标 (SpiderX)** | `realitySettings.spiderX` | `/` |
+---
 
-完成以上步骤后，保存配置并尝试连接。如果一切顺利，您就可以通过 VLESS + REALITY 协议开始使用代理服务了。
+## 📱 三、V2RayN 客户端配置指南
+
+在 V2RayN 中选择 **添加 VLESS 服务器**，并填写如下参数：
+
+| 字段 (中文/英文)        | 对应配置                           | 示例                                     |
+| :---------------- | :----------------------------- | :------------------------------------- |
+| 备注名称 (Remarks)    | -                              | 我的 VLESS-REALITY 节点                    |
+| 地址 (Address)      | VPS 公网 IP                      | 例如 `158.69.xx.xx`                      |
+| 端口 (Port)         | `inbounds.port`                | `14559`                                |
+| 用户 ID (UUID / ID) | `clients.id`                   | `f76f4404-73a0-439e-b449-65ddca9d8614` |
+| AlterId           | 固定值                            | `0`                                    |
+| 传输协议 (Network)    | `streamSettings.network`       | `tcp`                                  |
+| 伪装类型 (Type)       | `tcpSettings.header.type`      | `none`                                 |
+| 流控 (Flow)         | -                              | **留空**                                 |
+| 底层传输安全 (Security) | `streamSettings.security`      | `reality`                              |
+| SNI               | `realitySettings.serverNames`  | `server8.webhostmost.com`              |
+| 指纹 (Fingerprint)  | `realitySettings.fingerprints` | `chrome`                               |
+| 公钥 (Public Key)   | `x25519` 生成结果                  | `填写对应的 Public Key`                     |
+| 短 ID (Short ID)   | `realitySettings.shortIds`     | `fe4f754a504e7cac`                     |
+| 跳转目标 (SpiderX)    | `realitySettings.spiderX`      | `/`                                    |
+
+---
+
+## ✅ 测试连接
+
+完成配置后，点击 **[连接]** → 查看日志，如提示：
+
+```
+connected successfully
+```
+
+则表示配置成功，REALITY 节点已成功运行！
+
+---
+
+## 📚 小结
+
+| 项目        | 说明                            |
+| :-------- | :---------------------------- |
+| **协议**    | VLESS + REALITY               |
+| **核心**    | Xray-core                     |
+| **伪装原理**  | 利用真实网站的 TLS 握手伪装流量            |
+| **优势**    | 无需域名、强隐蔽、高性能                  |
+| **客户端推荐** | V2RayN / Nekoray / Clash.Meta |
+
+---
